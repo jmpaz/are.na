@@ -49,16 +49,17 @@ def get_channel_blocks(channel_slug):
     return blocks
 
 
-def fetch_channel_data(channel_slugs, file_path="data.json"):
+def fetch_channel_data(channel_slugs, file_path="data.json", rewrite=False):
     channel_data = load_data(file_path)
 
     for slug in channel_slugs:
-        if slug not in channel_data:
+        if rewrite or slug not in channel_data:
             blocks = get_channel_blocks(slug)
             channel_data[slug] = blocks
             print(f"Fetched {len(blocks)} blocks for channel: {slug}")
         else:
-            print(f"Channel data for {slug} already exists. Skipping.")
+            blocks = channel_data[slug]
+            print(f"Skipping {slug} ({len(blocks)} blocks exist).")
 
     save_data(file_path, channel_data)
     return channel_data
