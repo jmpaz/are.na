@@ -1,0 +1,16 @@
+```python
+channel_slugs = [
+    "llms-aibi9fxdz0s",
+    "deep-llms",
+]
+
+```
+
+```py
+from client import fetch_channel_data
+
+channel_data = fetch_channel_data(channel_slugs)
+
+for slug, blocks in channel_data.items():
+    print(f"{slug}: {len(blocks)} blocks")
+```
