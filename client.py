@@ -25,6 +25,7 @@ def get_channel_blocks(channel_slug):
     blocks = []
     page = 1
     per_page = 250
+
     while True:
         url = f"{base_url}/channels/{channel_slug}/contents?page={page}&per={per_page}"
         response = requests.get(url, headers=headers)
@@ -33,9 +34,12 @@ def get_channel_blocks(channel_slug):
 
         if response.status_code == 200:
             data = response.json()
+
+            # keep fetching until there are no more contents
             if "contents" in data:
-                blocks.extend(data["contents"])
-                if len(data["contents"]) < per_page:
+                contents = data["contents"]
+                blocks.extend(contents)
+                if len(contents) == 0:
                     break
             else:
                 print(
@@ -45,7 +49,9 @@ def get_channel_blocks(channel_slug):
         else:
             print(f"Request failed with status code: {response.status_code}")
             break
+
         page += 1
+
     return blocks
 
 
